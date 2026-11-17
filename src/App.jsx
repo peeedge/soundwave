@@ -100,8 +100,8 @@ function App() {
     <main>
       <header className="topbar">
         <a className="brand" href="#" aria-label="Soundwave home">
-          <span className="brand-mark"><AudioLines size={21} strokeWidth={2.5} /></span>
-          <span>soundwave</span>
+          {/* <span className="brand-mark"><AudioLines size={21} strokeWidth={2.5} /></span>
+          <span>soundwave</span> */}
         </a>
         <div className="header-actions">
           <label className="volume-control">
@@ -117,9 +117,9 @@ function App() {
 
       <section className="hero">
         <div>
-          <div className="eyebrow"><Sparkles size={14} /> Your instant audio palette</div>
-          <h1>Make some <em>noise.</em></h1>
-          <p>Tap a pad, catch a vibe. Your favorite sounds are always one beat away.</p>
+          {/* <div className="eyebrow"><Sparkles size={14} /> Your instant audio palette</div> */}
+          <h1>Andrew & <em>r0cky.</em></h1>
+          {/* <p>Tap a pad, catch a vibe. Your favorite sounds are always one beat away.</p> */}
         </div>
         <div className="hero-visual" aria-hidden="true">
           {[22, 46, 70, 38, 88, 55, 76, 32, 62, 44, 80, 26].map((height, index) => (

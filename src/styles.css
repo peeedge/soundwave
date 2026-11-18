@@ -144,6 +144,139 @@ input[type='range']::-webkit-slider-thumb {
 
 .stop-button:hover { border-color: var(--ink); background: rgba(41, 48, 52, .8); }
 
+.view-toggle {
+  border: 0;
+  background: transparent;
+  color: #9eabb3;
+  padding: 9px 11px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  font-size: 11px;
+  transition: 180ms ease;
+}
+
+.view-toggle:hover { color: var(--acid); }
+
+.simple-view {
+  min-height: calc(100vh - 126px);
+  padding: 70px 24px;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  background-image:
+    linear-gradient(90deg, rgba(3, 8, 12, .5), rgba(3, 8, 12, .2)),
+    linear-gradient(0deg, rgba(3, 8, 12, .82), rgba(3, 8, 12, .08) 55%, rgba(3, 8, 12, .38)),
+    url('../images/rocky-eridian-hero.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.simple-mode .simple-view { display: flex; }
+.simple-mode .hero,
+.simple-mode .soundboard { display: none; }
+
+.simple-kicker {
+  margin: 0 0 34px;
+  color: var(--acid);
+  font: 500 10px 'DM Mono', monospace;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+}
+
+.simple-orbit {
+  position: absolute;
+  width: min(78vw, 680px);
+  aspect-ratio: 1;
+  border: 1px solid rgba(255, 178, 74, .13);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 70px rgba(103, 154, 178, .025),
+    0 0 0 71px rgba(103, 154, 178, .06);
+  transform: scaleY(.42) rotate(-12deg);
+  pointer-events: none;
+}
+
+.random-button {
+  width: clamp(210px, 26vw, 270px);
+  aspect-ratio: 1;
+  border: 1px solid rgba(255, 194, 110, .48);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 38% 30%, rgba(255, 206, 139, .24), transparent 28%),
+    linear-gradient(145deg, #e98d30, #a9481e);
+  color: #fff8eb;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+  box-shadow:
+    0 0 0 10px rgba(255, 170, 66, .045),
+    0 0 70px rgba(255, 126, 38, .2),
+    inset 0 1px rgba(255, 255, 255, .28),
+    inset 0 -24px 50px rgba(81, 20, 4, .18);
+  transition: transform 160ms ease, box-shadow 200ms ease;
+}
+
+.random-button::after {
+  content: '';
+  position: absolute;
+  inset: 13px;
+  border: 1px solid rgba(255, 255, 255, .16);
+  border-radius: inherit;
+}
+
+.random-button strong {
+  font-size: 18px;
+  letter-spacing: -.03em;
+}
+
+.random-button span {
+  font: 500 9px 'DM Mono', monospace;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  opacity: .7;
+}
+
+.random-button:hover {
+  transform: scale(1.025);
+  box-shadow:
+    0 0 0 13px rgba(255, 170, 66, .06),
+    0 0 95px rgba(255, 126, 38, .3),
+    inset 0 1px rgba(255, 255, 255, .3);
+}
+
+.random-button:active,
+.random-button.playing { transform: scale(.96); }
+
+.random-result {
+  min-height: 55px;
+  margin-top: 35px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  position: relative;
+  z-index: 1;
+}
+
+.random-result span {
+  color: #73838c;
+  font: 500 9px 'DM Mono', monospace;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.random-result strong { font-size: 15px; font-weight: 600; }
+
 .hero {
   width: calc(100% - clamp(48px, 10vw, 152px));
   max-width: 1370px;
@@ -161,7 +294,7 @@ input[type='range']::-webkit-slider-thumb {
   background-image:
     linear-gradient(90deg, rgba(3, 8, 12, .98) 0%, rgba(3, 8, 12, .88) 31%, rgba(3, 8, 12, .25) 66%, rgba(3, 8, 12, .02) 100%),
     linear-gradient(0deg, rgba(3, 8, 12, .42), transparent 60%),
-    url('/images/rocky-eridian-hero.jpg');
+    url('../images/rocky-eridian-hero.jpg');
   background-size: cover;
   background-position: center;
   box-shadow: 0 28px 90px rgba(0, 0, 0, .34);
@@ -474,6 +607,9 @@ footer {
   .volume-control span { display: none; }
   input[type='range'] { width: 70px; }
   .stop-button { font-size: 0; padding: 10px; }
+  .view-toggle span { display: none; }
+  .view-toggle { padding-inline: 6px; }
+  .simple-view { min-height: calc(100vh - 118px); }
   .hero {
     width: calc(100% - 24px);
     min-height: 430px;
@@ -483,7 +619,7 @@ footer {
     background-image:
       linear-gradient(90deg, rgba(3, 8, 12, .96), rgba(3, 8, 12, .66) 62%, rgba(3, 8, 12, .15)),
       linear-gradient(0deg, rgba(3, 8, 12, .62), transparent 72%),
-      url('/images/rocky-eridian-hero.jpg');
+      url('../images/rocky-eridian-hero.jpg');
   }
   .hero > div:first-child { max-width: 88%; }
   .hero::before { display: none; }

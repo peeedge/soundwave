@@ -3,7 +3,9 @@ import {
   AudioLines,
   Download,
   Heart,
+  LayoutGrid,
   Search,
+  Shuffle,
   SlidersHorizontal,
   Sparkles,
   Square,
@@ -36,9 +38,14 @@ const SOUNDS = [
   { id: 22, name: 'Reply All Warning', category: 'Email', file: 'replyAllWarning.mp3', color: '#ff665f', pattern: [46, 39, 32, 26, 20, 15, 11, 8, 5] },
   { id: 23, name: 'Why Is This Meeting an Hour?', category: 'Meetings', file: 'whyIsThisMeetingAnHourLong.mp3', color: '#d590f1', pattern: [39, 17, 31, 44, 23, 36, 14, 28, 8] },
   { id: 24, name: 'Work Complete: Andrew Happiness', category: 'Tasks', file: 'workCompleteAndrewHappiness.mp3', color: '#ffbc55', pattern: [9, 19, 31, 43, 46, 37, 25, 16, 8] },
+  { id: 25, name: 'Rocky Also Has a Question', category: 'Rocky', file: 'alsoRockyHaveQuestion.mp3', color: '#ff9f5a', pattern: [11, 24, 39, 46, 33, 18, 42, 28, 9] },
+  { id: 26, name: 'Rocky? No, Roddy Knows', category: 'Rocky', file: 'rockyNoRoddyKnow.mp3', color: '#8d9fff', pattern: [38, 17, 44, 26, 35, 13, 41, 22, 8] },
+  { id: 27, name: 'Why the Root Folder?', category: 'Tech', file: 'whyRootFolder.mp3', color: '#64d6be', pattern: [8, 19, 32, 45, 29, 40, 17, 27, 10] },
 ]
 
-const CATEGORIES = ['All sounds', 'Favorites', 'Meetings', 'Tasks', 'Email', 'Calendar', 'Reactions', 'Greetings', 'CAD']
+const CATEGORIES = ['All sounds', 'Favorites', 'Meetings', 'Tasks', 'Email', 'Calendar', 'Reactions', 'Greetings', 'CAD', 'Rocky', 'Tech']
+
+const soundUrl = (file) => `${import.meta.env.BASE_URL}sounds/${encodeURIComponent(file)}`
 
 function useSoundEngine(volume) {
   const activeRef = useRef([])
@@ -52,7 +59,7 @@ function useSoundEngine(volume) {
   }, [])
 
   const play = useCallback((sound) => {
-    const audio = new Audio(`/sounds/${encodeURIComponent(sound.file)}`)
+    const audio = new Audio(soundUrl(sound.file))
     audio.volume = volume / 100
     activeRef.current.push(audio)
     audio.addEventListener('ended', () => {
@@ -78,6 +85,8 @@ function App() {
   const [volume, setVolume] = useState(75)
   const [favorites, setFavorites] = useState([6, 9])
   const [playing, setPlaying] = useState(null)
+  const [simpleView, setSimpleView] = useState(true)
+  const [lastRandom, setLastRandom] = useState(null)
   const { play, stopAll } = useSoundEngine(volume)
 
   const visibleSounds = useMemo(() => SOUNDS.filter((sound) => {
@@ -92,18 +101,29 @@ function App() {
     window.setTimeout(() => setPlaying((id) => id === sound.id ? null : id), 650)
   }
 
+  const playRandomSound = () => {
+    const choices = SOUNDS.filter((sound) => sound.id !== lastRandom?.id)
+    const sound = choices[Math.floor(Math.random() * choices.length)]
+    setLastRandom(sound)
+    triggerSound(sound)
+  }
+
   const toggleFavorite = (id) => {
     setFavorites((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id])
   }
 
   return (
-    <main>
+    <main className={simpleView ? 'simple-mode' : ''}>
       <header className="topbar">
         <a className="brand" href="#" aria-label="Soundwave home">
           {/* <span className="brand-mark"><AudioLines size={21} strokeWidth={2.5} /></span>
           <span>soundwave</span> */}
         </a>
         <div className="header-actions">
+          <button className="view-toggle" onClick={() => setSimpleView((current) => !current)}>
+            {simpleView ? <LayoutGrid size={15} /> : <Shuffle size={15} />}
+            <span>{simpleView ? 'Library' : 'Random mode'}</span>
+          </button>
           <label className="volume-control">
             <Volume2 size={17} />
             <input aria-label="Volume" type="range" min="0" max="100" value={volume} onChange={(event) => setVolume(Number(event.target.value))} />
@@ -114,6 +134,26 @@ function App() {
           </button>
         </div>
       </header>
+
+      <section className="simple-view">
+        <div className="simple-orbit" aria-hidden="true" />
+        <p className="simple-kicker">Random transmission</p>
+        <button className={`random-button ${playing ? 'playing' : ''}`} onClick={playRandomSound}>
+          <Shuffle size={42} strokeWidth={1.6} />
+          <strong>Play a sound</strong>
+          <span>Tap for random</span>
+        </button>
+        <div className="random-result" aria-live="polite">
+          {lastRandom ? (
+            <>
+              <span>Now transmitting</span>
+              <strong>{lastRandom.name}</strong>
+            </>
+          ) : (
+            <span>{SOUNDS.length} sounds standing by</span>
+          )}
+        </div>
+      </section>
 
       <section className="hero">
         <div>
@@ -170,7 +210,7 @@ function App() {
                   <div className="pad-actions">
                     <a
                       className="download-button"
-                      href={`/sounds/${encodeURIComponent(sound.file)}`}
+                      href={soundUrl(sound.file)}
                       download={sound.file}
                       onClick={(event) => event.stopPropagation()}
                       aria-label={`Download ${sound.name}`}
